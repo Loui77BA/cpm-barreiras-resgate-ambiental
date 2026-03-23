@@ -2,6 +2,8 @@
 
 Jogo educativo de plataforma 2D estilo retro, desenvolvido para conscientização ambiental no contexto do Colégio da Polícia Militar (CPM) de Barreiras - BA. O jogador controla um dos cinco heróis do Esquadrão Verde em uma missão para derrotar o Lorde Poluição e recuperar a Muda de Ouro.
 
+**Jogar agora:** https://loui77ba.github.io/cpm-barreiras-resgate-ambiental/
+
 ![Phaser 3](https://img.shields.io/badge/Phaser-3.80-blue)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.4-blue)
 ![Vite](https://img.shields.io/badge/Vite-5.4-purple)
@@ -22,7 +24,7 @@ Jogo educativo de plataforma 2D estilo retro, desenvolvido para conscientizaçã
 
 O Lorde Poluição invadiu o colégio, espalhando lixo e resíduos tóxicos por todos os pavilhões! O jogador deve montar o Esquadrão Verde e percorrer quatro fases temáticas, coletando moedas de reciclagem, derrotando inimigos tóxicos e enfrentando o boss final para salvar a Muda de Ouro.
 
-O jogo roda inteiramente no navegador, com todos os sprites gerados programaticamente via Canvas e toda a trilha sonora sintetizada em tempo real pela Web Audio API em estilo chiptune 8-bit.
+O jogo roda inteiramente no navegador (desktop e mobile), com todos os sprites gerados programaticamente via Canvas e toda a trilha sonora sintetizada em tempo real pela Web Audio API em estilo chiptune 8-bit.
 
 ## Personagens
 
@@ -83,6 +85,7 @@ Cada fase possui obstáculos únicos: gotas ácidas, barras de fogo rotativas, p
 | **Vite** | Bundler e servidor de desenvolvimento |
 | **Web Audio API** | Toda a trilha sonora e efeitos gerados proceduralmente |
 | **Canvas API** | Todos os sprites gerados programaticamente (sem assets externos de arte) |
+| **GitHub Pages** | Hospedagem em produção com deploy automático via GitHub Actions |
 
 > O jogo **não utiliza nenhum arquivo de sprite ou áudio externo** (exceto as fotos dos personagens e cenários). Tudo é gerado em tempo de execução.
 
@@ -149,8 +152,8 @@ src/
 
 ```bash
 # Clone o repositório
-git clone <url-do-repositorio>
-cd jogo-cpm
+git clone https://github.com/Loui77BA/cpm-barreiras-resgate-ambiental.git
+cd cpm-barreiras-resgate-ambiental
 
 # Instale as dependências
 npm install
@@ -173,6 +176,10 @@ npm run preview
 
 Os arquivos de produção serão gerados na pasta `dist/`.
 
+### Deploy
+
+O deploy é feito automaticamente via GitHub Actions a cada push na branch `main`. O site é publicado no GitHub Pages.
+
 ## Controles
 
 ### Teclado
@@ -188,19 +195,22 @@ Os arquivos de produção serão gerados na pasta `dist/`.
 
 ### Mobile (Tela sensível ao toque)
 
-O jogo detecta automaticamente dispositivos móveis e exibe um gamepad virtual:
+O jogo detecta automaticamente dispositivos móveis e exibe um gamepad virtual com controles otimizados:
 
 - **D-pad** (esquerda) — movimentação e pulo
 - **Botão A** (direita) — pular
 - **Botão B** (direita) — correr / atirar
 - **Botão Pause** (canto superior direito)
+- **Botão Mute** (tela título) — ativar/desativar som
+- **Botão Fullscreen** (canto superior esquerdo) — tela cheia
+- **Feedback háptico** — vibração sutil ao pressionar controles (Android)
 
 > O jogo requer orientação **paisagem** (horizontal). Um aviso é exibido automaticamente em modo retrato.
 
 ## Estrutura de Arquivos
 
 ```
-jogo-cpm/
+cpm-barreiras-resgate-ambiental/
 ├── index.html          # Página HTML com container do jogo
 ├── package.json        # Dependências e scripts npm
 ├── tsconfig.json       # Configuração do TypeScript
@@ -210,6 +220,7 @@ jogo-cpm/
 │   ├── personagens/    # Fotos dos 5 personagens (PNG)
 │   └── cenarios/       # Imagens de fundo dos cenários (PNG)
 ├── public/             # Assets estáticos
+├── .github/workflows/  # GitHub Actions (deploy automático)
 └── dist/               # Build de produção (gerado)
 ```
 
