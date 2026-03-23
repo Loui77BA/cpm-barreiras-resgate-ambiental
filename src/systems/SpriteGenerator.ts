@@ -564,50 +564,56 @@ export class SpriteGenerator {
     h.generateTexture('ui-heart', 16, 16);
     h.destroy();
 
-    // Virtual gamepad buttons — more visible with labels
-    const btnSize = 48;
+    // Virtual gamepad buttons — larger with better contrast
+    const btnSize = 56;
     const makeBtn = (key: string, color: number, label: string) => {
       const bg = this.gfx();
-      // Shadow
-      bg.fillStyle(0x000000, 0.3);
-      bg.fillCircle(btnSize / 2 + 1, btnSize / 2 + 1, btnSize / 2);
+      // Outer glow/shadow
+      bg.fillStyle(0x000000, 0.25);
+      bg.fillCircle(btnSize / 2 + 2, btnSize / 2 + 2, btnSize / 2);
       // Fill
-      bg.fillStyle(color, 0.6);
+      bg.fillStyle(color, 0.7);
       bg.fillCircle(btnSize / 2, btnSize / 2, btnSize / 2);
-      bg.lineStyle(3, 0xffffff, 0.7);
+      // Inner highlight
+      bg.fillStyle(0xffffff, 0.15);
+      bg.fillCircle(btnSize / 2, btnSize / 2 - 4, btnSize / 2 - 6);
+      // Border
+      bg.lineStyle(3, 0xffffff, 0.8);
       bg.strokeCircle(btnSize / 2, btnSize / 2, btnSize / 2 - 2);
-      // Letter label
-      bg.fillStyle(0xffffff, 0.9);
-      bg.fillRect(btnSize / 2 - 4, btnSize / 2 - 5, 8, 10);
+      // Letter label (larger)
+      bg.fillStyle(0xffffff, 0.95);
+      bg.fillRect(btnSize / 2 - 5, btnSize / 2 - 6, 10, 12);
       bg.generateTexture(key, btnSize, btnSize);
       bg.destroy();
     };
     makeBtn('btn-a', 0x4caf50, 'A');
     makeBtn('btn-b', 0xff9800, 'B');
 
-    // D-pad — higher contrast
+    // D-pad — larger with higher contrast
     const dp = this.gfx();
-    const dps = 120;
-    dp.fillStyle(0x222222, 0.6);
-    dp.fillRect(40, 0, 40, 120);
-    dp.fillRect(0, 40, 120, 40);
-    dp.lineStyle(3, 0xffffff, 0.5);
-    dp.strokeRect(40, 0, 40, 120);
-    dp.strokeRect(0, 40, 120, 40);
-    // Arrows — brighter
-    dp.fillStyle(0xffffff, 0.75);
+    const dps = 140;
+    const arm = 46;
+    const thick = 46;
+    const cx = dps / 2;
+    const cy = dps / 2;
+    // Background arms
+    dp.fillStyle(0x222222, 0.65);
+    dp.fillRect(cx - thick / 2, 0, thick, dps);
+    dp.fillRect(0, cy - thick / 2, dps, thick);
+    // Border
+    dp.lineStyle(3, 0xffffff, 0.55);
+    dp.strokeRect(cx - thick / 2, 0, thick, dps);
+    dp.strokeRect(0, cy - thick / 2, dps, thick);
+    // Arrows — brighter and larger
+    dp.fillStyle(0xffffff, 0.8);
     // Left arrow
-    dp.fillRect(8, 56, 20, 8);
-    dp.fillRect(12, 52, 8, 16);
+    dp.fillTriangle(8, cy, 24, cy - 10, 24, cy + 10);
     // Right arrow
-    dp.fillRect(92, 56, 20, 8);
-    dp.fillRect(96, 52, 8, 16);
+    dp.fillTriangle(dps - 8, cy, dps - 24, cy - 10, dps - 24, cy + 10);
     // Up arrow
-    dp.fillRect(56, 8, 8, 20);
-    dp.fillRect(52, 12, 16, 8);
+    dp.fillTriangle(cx, 8, cx - 10, 24, cx + 10, 24);
     // Down arrow
-    dp.fillRect(56, 92, 8, 20);
-    dp.fillRect(52, 96, 16, 8);
+    dp.fillTriangle(cx, dps - 8, cx - 10, dps - 24, cx + 10, dps - 24);
     dp.generateTexture('dpad', dps, dps);
     dp.destroy();
   }

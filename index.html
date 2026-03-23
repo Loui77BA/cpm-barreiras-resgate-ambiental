@@ -4,7 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="theme-color" content="#000000" />
   <title>CPM Barreiras: O Resgate Ambiental</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -15,6 +17,12 @@
       background-color: #000;
       touch-action: none;
       -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+      overscroll-behavior: none;
+      position: fixed;
+      inset: 0;
     }
     #game-container {
       width: 100%;
@@ -22,11 +30,34 @@
       display: flex;
       justify-content: center;
       align-items: center;
-    }
-    canvas { display: block; }
-    /* Safe area for notched devices */
-    #game-container {
+      /* Safe area for notched devices */
       padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    }
+    canvas {
+      display: block;
+      touch-action: none;
+    }
+    /* Fullscreen button for mobile */
+    #fullscreen-btn {
+      display: none;
+      position: fixed;
+      top: 8px;
+      left: 8px;
+      z-index: 10001;
+      background: rgba(0,0,0,0.6);
+      color: #fff;
+      border: 2px solid rgba(255,255,255,0.4);
+      border-radius: 8px;
+      font-size: 20px;
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+      line-height: 1;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+    #fullscreen-btn:active {
+      background: rgba(76,175,80,0.7);
     }
     /* Portrait orientation warning */
     #rotate-warning {
@@ -43,6 +74,7 @@
     @media (orientation: portrait) and (max-width: 1024px) {
       #rotate-warning { display: flex; }
       #game-container { display: none; }
+      #fullscreen-btn { display: none !important; }
     }
   </style>
 </head>
@@ -51,7 +83,36 @@
     <div style="font-size:48px">&#x1F504;</div>
     <div>Gire o dispositivo para<br><strong>modo paisagem</strong></div>
   </div>
+  <button id="fullscreen-btn" aria-label="Tela cheia">⛶</button>
   <div id="game-container"></div>
   <script type="module" src="/src/main.ts"></script>
+  <script>
+    // Show fullscreen button on mobile touch devices
+    (function() {
+      var isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ||
+        ('ontouchstart' in window && window.innerWidth < 1024);
+      var btn = document.getElementById('fullscreen-btn');
+      if (isMobile && document.fullscreenEnabled) {
+        btn.style.display = 'block';
+        btn.addEventListener('click', function() {
+          if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen().catch(function(){});
+            btn.textContent = '✕';
+          } else {
+            document.exitFullscreen().catch(function(){});
+            btn.textContent = '⛶';
+          }
+        });
+        document.addEventListener('fullscreenchange', function() {
+          btn.textContent = document.fullscreenElement ? '✕' : '⛶';
+        });
+      }
+
+      // Prevent pull-to-refresh and bounce scroll
+      document.addEventListener('touchmove', function(e) {
+        e.preventDefault();
+      }, { passive: false });
+    })();
+  </script>
 </body>
 </html>

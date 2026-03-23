@@ -113,12 +113,23 @@ export class TitleScene extends Phaser.Scene {
 
     this.updateMenu();
 
-    // Mute toggle hint
-    const muteHint = this.add.text(GAME_WIDTH - 16, GAME_HEIGHT - 16, 'M: som', {
-      fontSize: '10px',
-      color: '#666666',
-      fontFamily: 'Arial',
-    }).setOrigin(1);
+    // Mute toggle — visual button for mobile, text hint for desktop
+    const isMobile = this.sys.game.device.os.android || this.sys.game.device.os.iOS ||
+      (this.sys.game.device.input.touch && window.innerWidth < 1024);
+
+    const muteHint = this.add.text(
+      isMobile ? 50 : GAME_WIDTH - 16,
+      isMobile ? GAME_HEIGHT - 30 : GAME_HEIGHT - 16,
+      this.audio.muted ? '🔇' : (isMobile ? '🔊' : 'M: som'),
+      {
+        fontSize: isMobile ? '22px' : '10px',
+        color: isMobile ? '#ffffff' : '#666666',
+        fontFamily: 'Arial',
+        backgroundColor: isMobile ? '#00000088' : undefined,
+        padding: isMobile ? { x: 10, y: 6 } : undefined,
+      }
+    ).setOrigin(isMobile ? 0.5 : 1)
+      .setInteractive({ useHandCursor: true });
 
     // Floating leaf particles
     for (let i = 0; i < 8; i++) {
@@ -156,9 +167,13 @@ export class TitleScene extends Phaser.Scene {
     });
     this.input.keyboard?.on('keydown-ENTER', () => this.confirmMenu());
     this.input.keyboard?.on('keydown-SPACE', () => this.confirmMenu());
+    muteHint.on('pointerdown', () => {
+      this.audio.toggleMute();
+      muteHint.setText(this.audio.muted ? '🔇' : (isMobile ? '🔊' : 'M: som'));
+    });
     this.input.keyboard?.on('keydown-M', () => {
       this.audio.toggleMute();
-      muteHint.setText(this.audio.muted ? 'M: MUDO' : 'M: som');
+      muteHint.setText(this.audio.muted ? '🔇' : (isMobile ? '🔊' : 'M: som'));
     });
 
     // Title entrance animations
